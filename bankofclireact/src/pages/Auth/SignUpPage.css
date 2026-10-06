@@ -1,0 +1,108 @@
+.signup-card {
+  display: grid;
+  grid-template-columns: 42% 58%;
+}
+
+.signup-page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+}
+
+.signup-hero {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 9px 15px 17px;
+
+  overflow: hidden;
+
+  border-radius: 32px;
+
+  /*
+    Multiple radial gradients make the
+    blurred colorful effect.
+  */
+
+  background:
+    radial-gradient(
+      circle at 20% 12%,
+      rgba(255, 91, 140, 0.95),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(255, 0, 48, 0.9),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 38% 65%,
+      rgba(173, 101, 255, 0.85),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 15% 82%,
+      rgba(5, 10, 75, 0.95),
+      transparent 45%
+    ),
+    linear-gradient(
+      135deg,
+      #ff405d 0%,
+      #8f00d2 42%,
+      #2617c7 70%,
+      #11104e 100%
+    );
+}
+
+.hero-star {
+  color: white;
+
+  font-size: 16px;
+  line-height: 1;
+
+  user-select: none;
+}
+
+.hero-text {
+  color: white;
+
+  max-width: 470px;
+}
+
+.hero-text p {
+  margin: 0 0 28px;
+
+  font-size: 14px;
+  font-weight: 400;
+
+  letter-spacing: -0.5px;
+}
+
+.hero-text h2 {
+  margin: 0;
+
+  font-size: 16px;
+  line-height: 1.22;
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+}
+
+.signup-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 60px 70px;
+}
+
+.signup-inner {
+  width: min(100%, 650px);
+}

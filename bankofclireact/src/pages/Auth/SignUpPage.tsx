@@ -1,4 +1,5 @@
 import { type ChangeEvent, type FormEvent, useState } from 'react'
+import './SignUpPage.css'
 
 type SignUpFormData = {
   accountId: string
@@ -29,46 +30,111 @@ function SignUpPage() {
   }
 
   return (
-    <div>
-      <h1>Register Account</h1>
-      <p>Get started with a new account. Fill in your details below to set up your secure dashboard.</p>
+    <main className="signup-page">
+      <div className="signup-card">
+        <section className="signup-hero">
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="accountId">
-            <h2>Account ID</h2>
-          </label>
-          <input
-            id="accountId"
-            name="accountId"
-            type="text"
-            value={formData.accountId}
-            onChange={handleChange}
-            placeholder="Enter your Account ID"
-          />
-        </div>
+          <div className="hero-star" aria-hidden="true">
+            ★
+          </div>
 
-        <div>
-          <label htmlFor="accountPin">
-            <h2>Account PIN</h2>
-          </label>
-          <input
-            id="accountPin"
-            name="accountPin"
-            type="password"
-            value={formData.accountPin}
-            onChange={handleChange}
-            placeholder="Enter your Account PIN"
-          />
-        </div>
+          <div className="hero-text">
+            <p>You can easily</p>
 
-        <button type="submit">Register</button>
-      </form>
+            <h2>
+              View account balance,
+              <br />
+              deposit, withdraw, transfer
+              <br />
+              money at any time.
+            </h2>
+          </div>
 
-      <p>
-        Already have an account? <a href="/login">Login here</a>
-      </p>
-    </div>
+        </section>
+        <section className="signup-content">
+
+          <div className="signup-inner">
+
+            <h1>Register Account</h1>
+
+            <p className="signup-description">
+              Get started with a new account. Fill in your
+              details below to set up your secure dashboard.
+            </p>
+
+            <form
+              className="signup-form"
+              onSubmit={handleSubmit}
+            >
+
+              {/* ACCOUNT ID */}
+              <div className="form-group">
+                <label htmlFor="accountId">
+                  Account ID
+                </label>
+
+                <input
+                  id="accountId"
+                  name="accountId"
+                  type="text"
+                  value={formData.accountId}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+
+              {/* ACCOUNT PIN */}
+              <div className="form-group">
+                <label htmlFor="accountPin">
+                  Account PIN
+                </label>
+
+                <div className="password-wrapper">
+
+                  <input
+                    id="accountPin"
+                    name="accountPin"
+                    type="password"
+                    value={formData.accountPin}
+                    onChange={handleChange}
+                    placeholder=""
+                  />
+
+                  <button>
+                    type="button"
+                    className="password-toggle"
+                    
+              
+                  </button>
+
+                </div>
+              </div>
+
+              <button
+                className="register-button"
+                type="submit"
+              >
+                Register
+              </button>
+
+            </form>
+
+            <div className="login-section">
+              <span>
+                Already have an account?
+              </span>
+
+              <a href="/login">
+                Login
+              </a>
+            </div>
+
+          </div>
+
+        </section>
+      </div>
+      
+    </main>
   )
 }
 
