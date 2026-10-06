@@ -1,0 +1,11 @@
+.dashboardContainer {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.BalanceInfo {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
