@@ -1,3 +1,23 @@
+:root {
+    --text: black;
+    --text-secondary: #9C9C9C;
+    --white: white;
+    --accent: #7531D2;
+    --accent-gradient: linear-gradient(#853DDF, #312BB0);
+    --accent-light: #853DDF;
+    --background: #F5F5F5;
+    --success: #29AA42;
+    --failure: #DC424E;
+    --pending: #DBAB0A;
+}
+
 body {
     background-color: #F5F5F5;
+}
+
+.componentCard {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px 20px;
+    box-shadow: 0px 4px 25px 0px rgba(135, 29, 211, 0.1);
 }

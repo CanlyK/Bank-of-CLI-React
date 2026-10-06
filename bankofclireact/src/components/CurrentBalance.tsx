@@ -6,7 +6,7 @@ class CurrentBalance extends React.Component {
         const balance = "$25,000"
 
         return (
-            <div className="currentBalance">
+            <div className="currentBalance componentCard">
                 <h2>Current Balance</h2>
                 <p>{balance}</p>
             </div>
