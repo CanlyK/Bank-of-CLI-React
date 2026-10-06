@@ -6,7 +6,7 @@ class TransactionHistory extends React.Component {
     render() {
         let transactions:Array<Transaction> = Transaction.fetchTransactions();
         return (
-            <div className="transactionHistory">
+            <div className="transactionHistory componentCard">
                 <h2>Recent Transactions</h2>
                 <ul>
                     {transactions.map((transaction, index) => (

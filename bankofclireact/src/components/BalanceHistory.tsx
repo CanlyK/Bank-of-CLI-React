@@ -6,7 +6,7 @@ class BalanceHistory extends React.Component {
         const graph = "Place Graph Here"
 
         return (
-            <div className="balanceHistory">
+            <div className="balanceHistory componentCard">
                 <h2>Balance History</h2>
                 <p>{graph}</p>
             </div>
