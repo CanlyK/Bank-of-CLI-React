@@ -1,23 +1,43 @@
-:root {
-    --text: black;
-    --text-secondary: #9C9C9C;
-    --white: white;
-    --accent: #7531D2;
-    --accent-gradient: linear-gradient(#853DDF, #312BB0);
-    --accent-light: #853DDF;
-    --background: #F5F5F5;
-    --success: #29AA42;
-    --failure: #DC424E;
-    --pending: #DBAB0A;
+@import "tailwindcss";
+
+@theme {
+    --color-foreground: #000000;
+    --color-muted: #9C9C9C;
+    --color-heading: #1A1446;
+    --color-background: #F5F5F5;
+    --color-border: #D9D9D9;
+    --color-surface-hover: #F3F3F3;
+
+    --color-accent: #7531D2;
+    --color-accent-light: #853DDF;
+    --color-accent-dark: #312BB0;
+
+    --color-success: #29AA42;
+    --color-failure: #DC424E;
+    --color-pending: #DBAB0A;
+
+    --radius-card: 0.75rem;
+
+    --shadow-card: 0px 4px 25px 0px rgba(135, 29, 211, 0.1);
+    --shadow-popover: 0px 4px 25px 0px rgba(135, 29, 211, 0.15);
 }
 
-body {
-    background-color: #F5F5F5;
+@utility bg-accent-gradient {
+    background-image: linear-gradient(to right, var(--color-accent-dark), var(--color-accent-light));
 }
 
-.componentCard {
-    background-color: white;
-    border-radius: 10px;
-    padding: 5px 20px;
-    box-shadow: 0px 4px 25px 0px rgba(135, 29, 211, 0.1);
+@utility no-spinner {
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        appearance: none;
+    }
+}
+
+@layer base {
+    body {
+        background-color: var(--color-background);
+        color: var(--color-foreground);
+    }
 }

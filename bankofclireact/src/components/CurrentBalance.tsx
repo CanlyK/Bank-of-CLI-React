@@ -1,17 +1,14 @@
-import React from "react";
-import "./CurrentBalance.css"
+import Card from "./common/Card";
 
-class CurrentBalance extends React.Component {
-    render() {
-        const balance = "$25,000"
-
-        return (
-            <div className="currentBalance componentCard">
-                <h2>Current Balance</h2>
-                <p>{balance}</p>
-            </div>
-        )
-    }
+interface CurrentBalanceProps {
+    balance: number;
 }
 
-export default CurrentBalance
+export default function CurrentBalance({ balance }: CurrentBalanceProps) {
+    return (
+        <Card className="flex flex-col min-h-52 p-4">
+            <h2 className="text-base font-semibold">Current Balance</h2>
+            <p className="flex flex-1 items-center px-5 text-4xl font-bold">${balance.toLocaleString()}</p>
+        </Card>
+    );
+}

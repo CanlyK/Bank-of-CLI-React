@@ -1,17 +1,12 @@
-import React from "react";
-import "./BalanceHistory.css"
+import Card from "./common/Card";
 
-class BalanceHistory extends React.Component {
-    render() {
-        const graph = "Place Graph Here"
+export default function BalanceHistory() {
+    const graph = "Graph";
 
-        return (
-            <div className="balanceHistory componentCard">
-                <h2>Balance History</h2>
-                <p>{graph}</p>
-            </div>
-        )
-    }
+    return (
+        <Card className="flex flex-col col-span-2 min-h-52 p-4">
+            <h2 className="text-base font-semibold">Balance History</h2>
+            <p className="flex flex-1 items-center justify-center text-sm text-muted">{graph}</p>
+        </Card>
+    );
 }
-
-export default BalanceHistory

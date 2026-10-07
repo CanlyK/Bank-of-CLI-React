@@ -1,0 +1,10 @@
+{
+    "accounts": [
+        {
+            "account_id": 1,
+            "name": "Canly",
+            "pin": "1234",
+            "balance": 10
+        }
+    ]
+}

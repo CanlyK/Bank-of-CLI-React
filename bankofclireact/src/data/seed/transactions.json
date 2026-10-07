@@ -1,0 +1,11 @@
+{
+    "transactions": [
+        {
+            "transaction_id": 1, 
+            "amount": 10, 
+            "transfer_type": "Withdraw", 
+            "source_account": 1, 
+            "destination_account": 2
+        }
+    ]
+}
