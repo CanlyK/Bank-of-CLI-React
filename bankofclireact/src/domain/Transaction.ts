@@ -4,4 +4,5 @@ export interface Transaction {
     transfer_type: string;
     source_account: number;
     destination_account: number;
+    timestamp: string
 }

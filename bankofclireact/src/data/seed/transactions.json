@@ -5,7 +5,8 @@
             "amount": 10, 
             "transfer_type": "Withdraw", 
             "source_account": 1, 
-            "destination_account": 2
+            "destination_account": 0,
+            "timestamp": "10/7/2026, 5:49:00 PM"
         }
     ]
 }
