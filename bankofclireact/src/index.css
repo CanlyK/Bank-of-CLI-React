@@ -6,6 +6,7 @@
     --color-heading: #1A1446;
     --color-background: #F5F5F5;
     --color-border: #D9D9D9;
+    --color-surface: #FFFFFF;
     --color-surface-hover: #F3F3F3;
 
     --color-accent: #7531D2;
@@ -20,6 +21,18 @@
 
     --shadow-card: 0px 4px 25px 0px rgba(135, 29, 211, 0.1);
     --shadow-popover: 0px 4px 25px 0px rgba(135, 29, 211, 0.15);
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --color-foreground: #F5F5F5;
+    --color-muted: #8E8AA0;
+    --color-heading: #E4DEFF;
+    --color-background: #050624;
+    --color-border: #3A3650;
+    --color-surface: #0b1237;
+    --color-surface-hover: #2A2639;
 }
 
 @utility bg-accent-gradient {

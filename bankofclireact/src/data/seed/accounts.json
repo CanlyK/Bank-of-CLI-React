@@ -2,9 +2,15 @@
     "accounts": [
         {
             "account_id": 1,
-            "name": "Canly",
+            "name": "Lily",
             "pin": "1234",
-            "balance": 10
+            "balance": 10000
+        },
+        {
+            "account_id": 2,
+            "name": "Orchid",
+            "pin": "1235",
+            "balance": 100
         }
     ]
 }

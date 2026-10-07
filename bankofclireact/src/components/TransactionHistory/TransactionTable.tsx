@@ -1,12 +1,15 @@
+import Skeleton from "../common/Skeleton";
 import type { Transaction } from "../../domain/Transaction";
 
-const COLUMNS = ["Date/Time", "Category", "Destination", "Status", "Amount"];
+const COLUMNS = ["Date/Time", "Category", "From Account ID", "To Account ID", "Amount"];
+const SKELETON_ROWS = [0, 1, 2, 3, 4];
 
 interface TransactionTableProps {
     transactions: Transaction[];
+    loading?: boolean;
 }
 
-export default function TransactionTable({ transactions }: TransactionTableProps) {
+export default function TransactionTable({ transactions, loading = false }: TransactionTableProps) {
     return (
         <div>
             <table className="w-full text-left text-xs">
@@ -20,12 +23,21 @@ export default function TransactionTable({ transactions }: TransactionTableProps
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions.map((transaction) => (
+                    {loading && SKELETON_ROWS.map((row) => (
+                        <tr key={row} className="border-b border-border">
+                            {COLUMNS.map((column) => (
+                                <td key={column} className="px-4 py-4">
+                                    <Skeleton variant="text" width="70%" />
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                    {!loading && transactions.map((transaction) => (
                         <tr key={transaction.transaction_id} className="border-b border-border">
-                            <td className="px-4 py-4">{transaction.transaction_id}</td>
+                            <td className="px-4 py-4">{transaction.timestamp}</td>
                             <td className="px-4 py-4 uppercase">{transaction.transfer_type}</td>
-                            <td className="px-4 py-4">{transaction.source_account}</td>
-                            <td className="px-4 py-4">{transaction.destination_account}</td>
+                            <td className="px-4 py-4">{transaction.transfer_type == "transfer" ? transaction.source_account : "-"}</td>
+                            <td className="px-4 py-4">{transaction.transfer_type == "transfer" ? transaction.destination_account : "-"}</td>
                             <td className="px-4 py-4">{transaction.amount}</td>
                         </tr>
                     ))}
