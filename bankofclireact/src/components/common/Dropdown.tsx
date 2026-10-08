@@ -3,6 +3,8 @@ import Modal from "./Modal";
 import DepositForm from "../Forms/DepositForm";
 import WithdrawForm from "../Forms/WithdrawForm";
 import TransferForm from "../Forms/TransferForm";
+import type { TransferErrors } from "../../services/transactionService";
+import { isAmountInput } from "../TransactionHistory/TransactionHistory"
 
 type ModalAction = "Deposit" | "Withdraw" | "Transfer";
 type DropdownVariant = "button" | "nav";
@@ -10,9 +12,9 @@ type DropdownVariant = "button" | "nav";
 const ACTIONS: ModalAction[] = ["Deposit", "Withdraw", "Transfer"];
 
 interface DropdownProps {
-    onDeposit: (amount: number) => void;
-    onWithdraw: (amount: number) => void;
-    onTransfer: (toAccountId: number, amount: number) => void;
+    onDeposit: (amount: number) => string | null;
+    onWithdraw: (amount: number) => string | null;
+    onTransfer: (toAccountId: number, amount: number) => TransferErrors | null;
     label?: string;
     variant?: DropdownVariant;
     openOnHover?: boolean;
@@ -64,10 +66,9 @@ export default function Dropdown({
     const isNav = variant === "nav";
 
     const buttonClass = isNav
-        ? `w-32 py-2 rounded-full text-sm cursor-pointer ${isOpen ? "bg-accent-gradient font-semibold text-white" : ""}`
+        ? `w-full py-2 rounded-full text-xs cursor-pointer sm:text-sm ${isOpen ? "bg-accent-gradient font-semibold text-white" : ""}`
         : "px-5 py-2.5 rounded-lg bg-accent-gradient text-xs font-semibold text-white cursor-pointer hover:opacity-90";
 
-    // The nav menu hangs flush under the bar; its top padding keeps the pointer inside the hover area.
     const menuWrapperClass = isNav
         ? "absolute top-full left-0 z-10 w-full pt-1.5"
         : "absolute top-full right-0 z-10 w-40 pt-2";
@@ -83,7 +84,7 @@ export default function Dropdown({
     return (
         <div
             ref={dropdownRef}
-            className="relative"
+            className={isNav ? "relative flex-1 sm:flex-none sm:w-32" : "relative"}
             onMouseEnter={() => handleHover(true)}
             onMouseLeave={() => handleHover(false)}
         >
@@ -109,9 +110,9 @@ export default function Dropdown({
                 </div>
             )}
             <Modal open={modalAction !== null} onClose={closeModal}>
-                {modalAction === "Deposit" && <DepositForm onDeposit={onDeposit} onCancel={closeModal} />}
-                {modalAction === "Withdraw" && <WithdrawForm onWithdraw={onWithdraw} onCancel={closeModal} />}
-                {modalAction === "Transfer" && <TransferForm onTransfer={onTransfer} onCancel={closeModal} />}
+                {modalAction === "Deposit" && <DepositForm onDeposit={onDeposit} onCancel={closeModal} isAmountInput={isAmountInput} />}
+                {modalAction === "Withdraw" && <WithdrawForm onWithdraw={onWithdraw} onCancel={closeModal} isAmountInput={isAmountInput} />}
+                {modalAction === "Transfer" && <TransferForm onTransfer={onTransfer} onCancel={closeModal} isAmountInput={isAmountInput} />}
             </Modal>
         </div>
     );

@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Dropdown from "../common/Dropdown";
+import type { TransferErrors } from "../../services/transactionService";
 
 interface NavbarProps {
-    onDeposit: (amount: number) => void;
-    onWithdraw: (amount: number) => void;
-    onTransfer: (toAccountId: number, amount: number) => void;
+    onDeposit: (amount: number) => string | null;
+    onWithdraw: (amount: number) => string | null;
+    onTransfer: (toAccountId: number, amount: number) => TransferErrors | null;
 }
 
-const navItemClass = (active: boolean): string =>
-    `w-32 py-2 rounded-full text-sm cursor-pointer ${active ? "bg-accent-gradient font-semibold text-white" : ""}`;
+const NAV_ITEM_WRAPPER_CLASS = "flex-1 sm:flex-none sm:w-32";
+
+const navItemClass =(active: boolean): string =>
+    `w-full py-2 rounded-full text-xs cursor-pointer sm:text-sm ${active ? "bg-accent-gradient font-semibold text-white" : ""}`;
 
 function SunIcon() {
     return (
@@ -38,6 +41,7 @@ export default function Navbar({ onDeposit, onWithdraw, onTransfer }: NavbarProp
     const STORAGE_KEY = "theme";
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const settingsRef = useRef<HTMLDivElement>(null);
     const [theme, setTheme] = useState<Theme>(() =>
         localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light"
     );
@@ -45,12 +49,28 @@ export default function Navbar({ onDeposit, onWithdraw, onTransfer }: NavbarProp
     useEffect(() => {
         document.documentElement.dataset.theme = theme;
         localStorage.setItem(STORAGE_KEY, theme);
+
+        return () => {
+            delete document.documentElement.dataset.theme;
+        };
     }, [theme]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent): void => {
+            if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+                setSettingsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
-        <nav className="flex items-center w-fit mx-auto p-1.5 rounded-full bg-surface shadow-card">
-            <button className={navItemClass(!transactionOpen && !settingsOpen)}>Dashboard</button>
+        <nav className="flex flex-1 items-center p-1.5 rounded-full bg-surface shadow-card sm:flex-none">
+            <div className={NAV_ITEM_WRAPPER_CLASS}>
+                <button className={navItemClass(!transactionOpen && !settingsOpen)}>Dashboard</button>
+            </div>
             <Dropdown
                 variant="nav"
                 label="Transaction"
@@ -61,7 +81,8 @@ export default function Navbar({ onDeposit, onWithdraw, onTransfer }: NavbarProp
                 onTransfer={onTransfer}
             />
             <div
-                className="relative"
+                ref={settingsRef}
+                className={`relative ${NAV_ITEM_WRAPPER_CLASS}`}
                 onMouseEnter={() => setSettingsOpen(true)}
                 onMouseLeave={() => setSettingsOpen(false)}
             >

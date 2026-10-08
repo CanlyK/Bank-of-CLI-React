@@ -11,8 +11,8 @@ interface TransactionTableProps {
 
 export default function TransactionTable({ transactions, loading = false }: TransactionTableProps) {
     return (
-        <div>
-            <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto">
+            <table className="w-full min-w-xl text-left text-xs whitespace-nowrap">
                 <thead>
                     <tr className="bg-accent-light/20">
                         {COLUMNS.map((column) => (
