@@ -96,6 +96,5 @@ export function transfer(fromAccountId: number, toAccountId: number, amount: num
     const toAccount = getAccountById(toAccountId);
     saveAccount({ ...fromAccount, balance: fromAccount.balance - amount });
     saveAccount({ ...toAccount, balance: toAccount.balance + amount });
-
     addTransaction({amount, transfer_type: "transfer", source_account: fromAccountId, destination_account: toAccountId})
 }

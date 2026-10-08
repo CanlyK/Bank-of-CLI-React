@@ -1,4 +1,5 @@
 import { type ChangeEvent, type FormEvent, useState } from 'react'
+import { addAccount } from "../../data/accountRepository";
 import './SignUpPage.css'
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom'
@@ -40,6 +41,8 @@ function SignUpPage() {
     event.preventDefault()
 
     console.log('Register account:', formData)
+
+    addAccount(Number(formData.accountId), formData.username, formData.accountPin);
   }
 
   return (

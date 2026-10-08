@@ -32,7 +32,7 @@ export default function TransactionTable({ transactions, loading = false }: Tran
                             ))}
                         </tr>
                     ))}
-                    {!loading && transactions.map((transaction) => (
+                    {!loading && transactions.reverse().map((transaction) => (
                         <tr key={transaction.transaction_id} className="border-b border-border">
                             <td className="px-4 py-4">{transaction.timestamp}</td>
                             <td className="px-4 py-4 uppercase">{transaction.transfer_type}</td>

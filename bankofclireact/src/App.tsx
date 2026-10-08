@@ -20,6 +20,7 @@ function App() {
         <Route path="/register" element={<SignUpPage />} />
 
         <Route path="/login" element={<SignInPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route
           path="*"
