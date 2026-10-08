@@ -93,7 +93,12 @@ function DashboardContent({ accountId }: { accountId: number }) {
                 </div>
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
                     <CurrentBalance balance={account.balance} loading={isLoading} />
-                    <BalanceHistory loading={isLoading} />
+                    <BalanceHistory
+                        transactions={transactions}
+                        accountId={account.account_id}
+                        balance={account.balance}
+                        loading={isLoading}
+                    />
                 </div>
                 <TransactionHistory transactions={transactions} onDeposit={deposit} onWithdraw={withdraw} onTransfer={transfer} loading={isLoading} />
             </div>
