@@ -5,7 +5,7 @@ import {
 } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
-
+import Card from '../../components/common/Card'
 import './SignUpPage.css'
 import { addAccount, getAccounts } from '../../data/accountRepository'
 
@@ -78,8 +78,8 @@ function SignUpPage() {
   }
 
   return (
-    <main className="signup-page">
-      <div className="componentCard signup-card">
+    <main className="signup-page signup-page--register">
+      <Card className="componentCard signup-card px-12 py-18 md:px-8 md:py-8">
 
         {/* LEFT SIDE */}
         <section className="signup-hero">
@@ -107,7 +107,7 @@ function SignUpPage() {
 
           <div className="signup-inner">
 
-            <h1>Register Account</h1>
+            <h1 className="signup-title">Register Account</h1>
 
             <p className="signup-description">
               Get started with a new account. Fill in your
@@ -270,7 +270,7 @@ function SignUpPage() {
 
         </section>
 
-      </div>
+      </Card>
     </main>
   )
 }

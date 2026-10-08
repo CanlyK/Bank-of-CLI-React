@@ -4,7 +4,7 @@ import {
   useState,
 } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
+import Card from '../../components/common/Card'
 import './SignUpPage.css'
 import { getAccounts } from '../../data/accountRepository'
 
@@ -83,7 +83,7 @@ function SignInPage() {
 
   return (
     <main className="signup-page">
-      <div className="componentCard signup-card">
+      <Card className="componentCard signup-card px-12 py-18 md:px-8 md:py-8">
 
         {/* LEFT SIDE */}
         <section className="signup-hero">
@@ -111,7 +111,7 @@ function SignInPage() {
 
           <div className="signup-inner">
 
-            <h1>Account Login</h1>
+            <h1 className="signup-title">Account Login</h1>
 
             <p className="signup-description">
               Welcome back! Please enter your credentials
@@ -252,7 +252,7 @@ function SignInPage() {
 
         </section>
 
-      </div>
+      </Card>
     </main>
   )
 }
