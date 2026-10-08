@@ -6,7 +6,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 
 import './SignUpPage.css'
-import { getAccountById } from '../../data/accountRepository'
+import { getAccounts } from '../../data/accountRepository'
 
 type SignInFormData = {
   accountId: string
@@ -19,11 +19,14 @@ const initialFormData: SignInFormData = {
 }
 
 function SignInPage() {
-   const navigate = useNavigate();
+  const navigate = useNavigate()
+
   const [formData, setFormData] =
     useState<SignInFormData>(initialFormData)
 
   const [showPin, setShowPin] = useState(false)
+
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement>,
@@ -37,6 +40,9 @@ function SignInPage() {
       ...previousData,
       [fieldName]: value,
     }))
+
+    // Clear the previous error
+    setErrorMessage('')
   }
 
   const handleSubmit = (
@@ -44,9 +50,35 @@ function SignInPage() {
   ): void => {
     event.preventDefault()
 
-    navigate('/dashboard', { 
-      state: getAccountById(Number(formData.accountId))
-    });
+    setErrorMessage('')
+
+    const accountId = Number(formData.accountId)
+
+    const accounts = getAccounts()
+
+    const account = accounts.find(
+      (acc) => acc.account_id === accountId
+    )
+
+    // Account ID doesn't exist
+    if (!account) {
+      setErrorMessage("Account doesn't exist")
+      return
+    }
+
+    // Account exists, but PIN is incorrect
+    if (account.pin !== formData.accountPin) {
+      setErrorMessage(
+        'Invalid credentials. Please try again.'
+      )
+
+      return
+    }
+
+    // Login successful
+    navigate('/dashboard', {
+      state: account,
+    })
   }
 
   return (
@@ -55,6 +87,7 @@ function SignInPage() {
 
         {/* LEFT SIDE */}
         <section className="signup-hero">
+
           <div className="hero-star" aria-hidden="true">
             ★
           </div>
@@ -70,10 +103,12 @@ function SignInPage() {
               money at any time.
             </h2>
           </div>
+
         </section>
 
         {/* RIGHT SIDE */}
         <section className="signup-content">
+
           <div className="signup-inner">
 
             <h1>Account Login</h1>
@@ -187,6 +222,13 @@ function SignInPage() {
                 </div>
               </div>
 
+              {/* ERROR */}
+              {errorMessage && (
+                <p className="form-error">
+                  {errorMessage}
+                </p>
+              )}
+
               <button
                 className="register-button"
                 type="submit"
@@ -197,7 +239,9 @@ function SignInPage() {
             </form>
 
             <div className="login-section">
-              <span>Don't have an account?</span>
+              <span>
+                Don't have an account?
+              </span>
 
               <Link to="/register">
                 Register
@@ -205,6 +249,7 @@ function SignInPage() {
             </div>
 
           </div>
+
         </section>
 
       </div>

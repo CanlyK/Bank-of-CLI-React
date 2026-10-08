@@ -1,8 +1,14 @@
-import { type ChangeEvent, type FormEvent, useState } from 'react'
-import { addAccount } from "../../data/accountRepository";
-import './SignUpPage.css'
-import toast from 'react-hot-toast';
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useState,
+} from 'react'
 import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
+
+import './SignUpPage.css'
+import { addAccount, getAccounts } from '../../data/accountRepository'
+
 type SignUpFormData = {
   username: string
   accountId: string
@@ -21,6 +27,8 @@ function SignUpPage() {
 
   const [showPin, setShowPin] = useState(false)
 
+  const [errorMessage, setErrorMessage] = useState('')
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement>
   ): void => {
@@ -33,6 +41,8 @@ function SignUpPage() {
       ...previousData,
       [fieldName]: value,
     }))
+
+    setErrorMessage('')
   }
 
   const handleSubmit = (
@@ -40,17 +50,39 @@ function SignUpPage() {
   ): void => {
     event.preventDefault()
 
-    console.log('Register account:', formData)
+    setErrorMessage('')
 
-    addAccount(Number(formData.accountId), formData.username, formData.accountPin);
+    const accountId = Number(formData.accountId)
+
+    const accounts = getAccounts()
+
+    const accountAlreadyExists = accounts.some(
+      (account) => account.account_id === accountId
+    )
+
+    if (accountAlreadyExists) {
+      setErrorMessage(
+        'Account ID already exists. Please try a different account ID.'
+      )
+
+      return
+    }
+
+    addAccount(
+      accountId,
+      formData.username,
+      formData.accountPin
+    )
+
+    toast.success('Account registered successfully!')
   }
 
   return (
     <main className="signup-page">
-      <div className="signup-card">
+      <div className="componentCard signup-card">
 
         {/* LEFT SIDE */}
-        <section className="signup-hero component-card">
+        <section className="signup-hero">
 
           <div className="hero-star" aria-hidden="true">
             ★
@@ -71,7 +103,7 @@ function SignUpPage() {
         </section>
 
         {/* RIGHT SIDE */}
-        <section className="signup-content component-card">
+        <section className="signup-content">
 
           <div className="signup-inner">
 
@@ -86,6 +118,7 @@ function SignUpPage() {
               className="signup-form"
               onSubmit={handleSubmit}
             >
+
               {/* USERNAME */}
               <div className="form-group">
                 <label htmlFor="username">
@@ -100,6 +133,7 @@ function SignUpPage() {
                   onChange={handleChange}
                 />
               </div>
+
               {/* ACCOUNT ID */}
               <div className="form-group">
                 <label htmlFor="accountId">
@@ -112,7 +146,6 @@ function SignUpPage() {
                   type="text"
                   value={formData.accountId}
                   onChange={handleChange}
-                  placeholder=""
                 />
               </div>
 
@@ -130,7 +163,6 @@ function SignUpPage() {
                     type={showPin ? 'text' : 'password'}
                     value={formData.accountPin}
                     onChange={handleChange}
-                    placeholder=""
                   />
 
                   <button
@@ -146,7 +178,6 @@ function SignUpPage() {
                     }
                   >
                     {showPin ? (
-                      // Eye with slash
                       <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
@@ -158,12 +189,14 @@ function SignUpPage() {
                           strokeWidth="2"
                           strokeLinecap="round"
                         />
+
                         <path
                           d="M10.5 10.5a2 2 0 0 0 3 3"
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="2"
                         />
+
                         <path
                           d="M6.7 6.7C4.6 8.2 3.2 10.1 2 12c2.3 3.8 5.7 7 10 7 1.6 0 3.1-.4 4.4-1"
                           fill="none"
@@ -171,8 +204,9 @@ function SignUpPage() {
                           strokeWidth="2"
                           strokeLinecap="round"
                         />
+
                         <path
-                          d="M9.9 5.2c.7-.2 1.4-.2 2.1-.2 4.3 0 7.7 3.2 10 7-0.7 1.2-1.5 2.3-2.4 3.2"
+                          d="M9.9 5.2c.7-.2 1.4-.2 2.1-.2 4.3 0 7.7 3.2 10 7-.7 1.2-1.5 2.3-2.4 3.2"
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="2"
@@ -180,7 +214,6 @@ function SignUpPage() {
                         />
                       </svg>
                     ) : (
-                      // Eye
                       <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
@@ -207,12 +240,16 @@ function SignUpPage() {
                 </div>
               </div>
 
+              {/* ERROR */}
+              {errorMessage && (
+                <p className="form-error">
+                  {errorMessage}
+                </p>
+              )}
+
               <button
                 className="register-button"
                 type="submit"
-                onClick={() => {
-                  toast.success('Account registered successfully!');
-                }}
               >
                 Register
               </button>
