@@ -32,7 +32,14 @@ export default function TransactionTable({ transactions, loading = false }: Tran
                             ))}
                         </tr>
                     ))}
-                    {!loading && transactions.reverse().map((transaction) => (
+                    {!loading && transactions.length === 0 && (
+                        <tr>
+                            <td colSpan={COLUMNS.length} className="px-4 py-6 text-center text-muted">
+                                No transactions found.
+                            </td>
+                        </tr>
+                    )}
+                    {!loading && transactions.map((transaction) => (
                         <tr key={transaction.transaction_id} className="border-b border-border">
                             <td className="px-4 py-4">{transaction.timestamp}</td>
                             <td className="px-4 py-4 uppercase">{transaction.transfer_type}</td>
