@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Dropdown from "../common/Dropdown";
 import type { TransferErrors } from "../../services/transactionService";
 
@@ -30,6 +31,14 @@ function MoonIcon() {
     );
 }
 
+function LogoutIcon() {
+    return (
+        <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+        </svg>
+    );
+}
+
 export type Theme = "light" | "dark";
 
 const THEME_OPTIONS: { theme: Theme; label: string; Icon: () => React.JSX.Element }[] = [
@@ -39,6 +48,7 @@ const THEME_OPTIONS: { theme: Theme; label: string; Icon: () => React.JSX.Elemen
 
 export default function Navbar({ onDeposit, onWithdraw, onTransfer }: NavbarProps) {
     const STORAGE_KEY = "theme";
+    const navigate = useNavigate();
     const [transactionOpen, setTransactionOpen] = useState(false);
     const [settingsOpen, setSettingsOpen] = useState(false);
     const settingsRef = useRef<HTMLDivElement>(null);
@@ -90,8 +100,8 @@ export default function Navbar({ onDeposit, onWithdraw, onTransfer }: NavbarProp
                     Settings
                 </button>
                 {settingsOpen && (
-                    <div className="absolute top-full left-0 z-10 w-full pt-1.5">
-                        <div className="flex justify-center gap-2 py-2 rounded-b-3xl bg-surface-hover shadow-popover">
+                    <div className="absolute top-full right-0 z-10 min-w-full w-max pt-1.5">
+                        <div className="flex justify-center gap-2 px-2 py-2 rounded-b-3xl bg-surface-hover shadow-popover">
                             {THEME_OPTIONS.map(({ theme: option, label, Icon }) => (
                                 <button
                                     key={option}
@@ -103,6 +113,14 @@ export default function Navbar({ onDeposit, onWithdraw, onTransfer }: NavbarProp
                                     <Icon />
                                 </button>
                             ))}
+                            <button
+                                onClick={() => navigate("/login", { replace: true })}
+                                name="Log out"
+                                title="Log out"
+                                className="p-2 rounded-full cursor-pointer hover:bg-accent-light/10"
+                            >
+                                <LogoutIcon />
+                            </button>
                         </div>
                     </div>
                 )}
