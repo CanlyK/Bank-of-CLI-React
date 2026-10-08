@@ -2,21 +2,23 @@ import { useState } from "react";
 import Card from "../common/Card";
 
 interface DepositFormProps {
-    onDeposit: (amount: number) => void;
+    onDeposit: (amount: number) => string | null;
     onCancel: () => void;
+    isAmountInput: (input: string) => boolean;
 }
 
-export default function DepositForm({ onDeposit, onCancel }: DepositFormProps) {
+export default function DepositForm({ onDeposit, onCancel, isAmountInput }: DepositFormProps) {
     const [amount, setAmount] = useState("");
+    const [amountError, setAmountError] = useState<string | null>(null);
 
     const submitDeposit = (): void => {
-        const depositAmount = Number(amount);
+        const error = onDeposit(Number(amount));
 
-        if (!Number.isFinite(depositAmount) || depositAmount <= 0) {
+        if (error) {
+            setAmountError(error);
             return;
         }
 
-        onDeposit(depositAmount);
         onCancel();
     };
 
@@ -26,20 +28,28 @@ export default function DepositForm({ onDeposit, onCancel }: DepositFormProps) {
                 <h2 className="text-3xl font-bold">Deposit Amount</h2>
                 <p className="text-lg leading-tight italic">Input an amount to deposit.</p>
             </div>
-            <Card className="flex flex-col gap-2 px-12 py-5 border border-border">
+            <Card className="flex flex-col gap-2 px-6 py-5 border border-border sm:px-12">
                 <label htmlFor="deposit" className="text-lg italic">Amount</label>
-                <div className="flex items-center text-5xl font-bold">
+                <div className="flex items-center text-4xl font-bold sm:text-5xl">
                     <span>$</span>
                     <input
-                        type="number"
+                        type="text"
+                        inputMode="decimal"
                         name="deposit"
                         id="deposit"
                         placeholder="0"
                         value={amount}
-                        onChange={(event) => setAmount(event.target.value)}
+                        onChange={(event) => {
+                            if (isAmountInput(event.target.value)) {
+                                setAmount(event.target.value);
+                                setAmountError(null);
+                            }
+                        }}
+                        aria-invalid={amountError !== null}
                         className="w-full min-w-0 bg-transparent outline-none no-spinner"
                     />
                 </div>
+                {amountError && <p role="alert" className="text-sm text-failure">{amountError}</p>}
             </Card>
             <div className="flex flex-col gap-4">
                 <button

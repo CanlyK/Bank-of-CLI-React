@@ -10,7 +10,7 @@ export default function CurrentBalance({ balance, loading = false }: CurrentBala
     return (
         <Card className="flex flex-col min-h-52 p-4">
             <h2 className="text-base font-semibold">Current Balance</h2>
-            <p className="flex flex-1 items-center px-5 text-4xl font-bold">
+            <p className="flex flex-1 items-center px-5 text-3xl font-bold break-all sm:text-4xl">
                 {loading ? <Skeleton variant="text" width="60%" /> : `$${balance.toLocaleString()}`}
             </p>
         </Card>
