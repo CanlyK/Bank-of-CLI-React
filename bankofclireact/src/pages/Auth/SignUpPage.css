@@ -1,3 +1,5 @@
+/* ---------- Base (desktop) ---------- */
+
 .signup-card {
   display: grid;
   grid-template-columns: 42% 58%;
@@ -27,33 +29,11 @@
   border-radius: 32px;
 
   background:
-    radial-gradient(
-      circle at 20% 12%,
-      rgba(255, 91, 140, 0.95),
-      transparent 38%
-    ),
-    radial-gradient(
-      circle at 80% 30%,
-      rgba(255, 0, 48, 0.9),
-      transparent 42%
-    ),
-    radial-gradient(
-      circle at 38% 65%,
-      rgba(173, 101, 255, 0.85),
-      transparent 38%
-    ),
-    radial-gradient(
-      circle at 15% 82%,
-      rgba(5, 10, 75, 0.95),
-      transparent 45%
-    ),
-    linear-gradient(
-      135deg,
-      #ff405d 0%,
-      #8f00d2 42%,
-      #2617c7 70%,
-      #11104e 100%
-    );
+    radial-gradient(circle at 20% 12%, rgba(255, 91, 140, 0.95), transparent 38%),
+    radial-gradient(circle at 80% 30%, rgba(255, 0, 48, 0.9), transparent 42%),
+    radial-gradient(circle at 38% 65%, rgba(173, 101, 255, 0.85), transparent 38%),
+    radial-gradient(circle at 15% 82%, rgba(5, 10, 75, 0.95), transparent 45%),
+    linear-gradient(135deg, #ff405d 0%, #8f00d2 42%, #2617c7 70%, #11104e 100%);
 }
 
 .hero-star {
@@ -163,8 +143,7 @@
 .form-group input:focus {
   background: #ededed;
 
-  box-shadow:
-    0 0 0 3px rgba(86, 60, 220, 0.15);
+  box-shadow: 0 0 0 3px rgba(86, 60, 220, 0.15);
 }
 
 .password-wrapper {
@@ -219,12 +198,7 @@
   border: none;
   border-radius: 17px;
 
-  background:
-    linear-gradient(
-      90deg,
-      #3429b9,
-      #8739e4
-    );
+  background: linear-gradient(90deg, #3429b9, #8739e4);
 
   color: white;
 
@@ -263,7 +237,6 @@
   font-size: 20px;
 }
 
-
 .login-section a {
   color: #6d31dc;
 
@@ -284,4 +257,195 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
+}
+
+/* ---------- Tablet and below ---------- */
+
+@media (max-width: 1024px) {
+  .signup-card {
+    grid-template-columns: 38% 62%;
+  }
+
+  .form-group label {
+    font-size: 18px;
+  }
+
+  .form-group input,
+  .register-button {
+    height: 60px;
+    font-size: 17px;
+  }
+
+  .signup-description {
+    font-size: 17px;
+    margin-bottom: 24px;
+  }
+
+  .login-section {
+    font-size: 16px;
+    margin-top: 36px;
+  }
+}
+
+/* ---------- Mobile: stack the hero above the form ---------- */
+
+@media (max-width: 768px) {
+  .signup-page {
+    align-items: flex-start;
+    padding: 0;
+    min-height: 100dvh;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255, 91, 140, 0.9), transparent 45%),
+      radial-gradient(circle at 85% 40%, rgba(255, 0, 48, 0.75), transparent 45%),
+      radial-gradient(circle at 30% 70%, rgba(173, 101, 255, 0.85), transparent 45%),
+      radial-gradient(circle at 20% 95%, rgba(5, 10, 75, 0.9), transparent 45%),
+      linear-gradient(160deg, #ff405d 0%, #8f00d2 45%, #2617c7 75%, #11104e 100%);
+  }
+
+  .signup-card {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-height: 100dvh;
+    box-sizing: border-box;
+
+    padding: 24px 16px 32px;
+    gap: 16px;
+
+    background: transparent;
+  }
+
+  /* Hero moves below the form, as a white card like the mockup */
+  .signup-hero {
+    order: 2;
+
+    padding: 24px 20px;
+    border-radius: 24px;
+
+    background: #ffffff;
+    color: #101010;
+  }
+
+  .hero-star {
+    display: none;
+  }
+
+  .hero-text {
+    max-width: none;
+  }
+
+  .hero-text p {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #101010;
+  }
+
+  .hero-text h2 {
+    font-size: 18px;
+    line-height: 1.3;
+    color: #101010;
+  }
+
+  .hero-text .hero-text-white {
+    color: #101010;
+  }
+
+  .signup-content {
+    order: 1;
+
+    padding: 0;
+    width: 100%;
+  }
+
+  .signup-inner {
+    width: 100%;
+
+    padding: 28px 22px 28px;
+    box-sizing: border-box;
+
+    border-radius: 24px;
+    background: #ffffff;
+  }
+
+  .signup-inner h1 {
+    font-size: 28px;
+    margin: 0 0 10px;
+  }
+
+  .signup-description {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
+
+  .signup-form {
+    gap: 18px;
+  }
+
+  .form-group {
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input {
+    height: 48px;
+    padding: 0 16px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  .password-wrapper input {
+    padding-right: 52px;
+  }
+
+  .password-toggle {
+    right: 12px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .password-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .register-button {
+    height: 48px;
+    font-size: 15px;
+    border-radius: 12px;
+    margin-top: 0;
+  }
+
+  .form-error {
+    font-size: 12px;
+    margin: -6px 0 0;
+  }
+
+  .login-section {
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 16px;
+    font-size: 13px;
+    gap: 4px;
+  }
+}
+
+/* ---------- Small phones ---------- */
+
+@media (max-width: 380px) {
+  .signup-card {
+    padding: 16px 12px 24px;
+  }
+
+  .signup-inner {
+    padding: 22px 16px;
+  }
+
+  .signup-inner h1 {
+    font-size: 24px;
+  }
 }
