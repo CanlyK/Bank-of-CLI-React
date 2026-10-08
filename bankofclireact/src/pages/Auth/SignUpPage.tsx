@@ -1,5 +1,6 @@
 import { type ChangeEvent, type FormEvent, useState } from 'react'
 import './SignUpPage.css'
+import toast from 'react-hot-toast';
 
 type SignUpFormData = {
   username: string
@@ -206,6 +207,9 @@ function SignUpPage() {
               <button
                 className="register-button"
                 type="submit"
+                onClick={() => {
+                  toast.success('Account registered successfully!');
+                }}
               >
                 Register
               </button>
