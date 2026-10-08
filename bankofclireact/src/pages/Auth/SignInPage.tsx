@@ -1,30 +1,33 @@
-import { type ChangeEvent, type FormEvent, useState } from 'react'
-import './SignUpPage.css'
-import toast from 'react-hot-toast';
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useState,
+} from 'react'
 import { Link } from 'react-router-dom'
-type SignUpFormData = {
-  username: string
+
+import './SignUpPage.css'
+
+type SignInFormData = {
   accountId: string
   accountPin: string
 }
 
-const initialFormData: SignUpFormData = {
-  username: '',
+const initialFormData: SignInFormData = {
   accountId: '',
   accountPin: '',
 }
 
-function SignUpPage() {
+function SignInPage() {
   const [formData, setFormData] =
-    useState<SignUpFormData>(initialFormData)
+    useState<SignInFormData>(initialFormData)
 
   const [showPin, setShowPin] = useState(false)
 
   const handleChange = (
-    event: ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>,
   ): void => {
     const fieldName =
-      event.target.name as keyof SignUpFormData
+      event.target.name as keyof SignInFormData
 
     const { value } = event.target
 
@@ -35,20 +38,19 @@ function SignUpPage() {
   }
 
   const handleSubmit = (
-    event: FormEvent<HTMLFormElement>
+    event: FormEvent<HTMLFormElement>,
   ): void => {
     event.preventDefault()
 
-    console.log('Register account:', formData)
+    console.log('Login account:', formData)
   }
 
   return (
     <main className="signup-page">
-      <div className="signup-card">
+      <div className="componentCard signup-card">
 
         {/* LEFT SIDE */}
-        <section className="signup-hero component-card">
-
+        <section className="signup-hero">
           <div className="hero-star" aria-hidden="true">
             ★
           </div>
@@ -64,39 +66,24 @@ function SignUpPage() {
               money at any time.
             </h2>
           </div>
-
         </section>
 
         {/* RIGHT SIDE */}
-        <section className="signup-content component-card">
-
+        <section className="signup-content">
           <div className="signup-inner">
 
-            <h1>Register Account</h1>
+            <h1>Account Login</h1>
 
             <p className="signup-description">
-              Get started with a new account. Fill in your
-              details below to set up your secure dashboard.
+              Welcome back! Please enter your credentials
+              to access your secure dashboard.
             </p>
 
             <form
               className="signup-form"
               onSubmit={handleSubmit}
             >
-              {/* USERNAME */}
-              <div className="form-group">
-                <label htmlFor="username">
-                  Username
-                </label>
 
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-              </div>
               {/* ACCOUNT ID */}
               <div className="form-group">
                 <label htmlFor="accountId">
@@ -109,7 +96,6 @@ function SignUpPage() {
                   type="text"
                   value={formData.accountId}
                   onChange={handleChange}
-                  placeholder=""
                 />
               </div>
 
@@ -127,7 +113,6 @@ function SignUpPage() {
                     type={showPin ? 'text' : 'password'}
                     value={formData.accountPin}
                     onChange={handleChange}
-                    placeholder=""
                   />
 
                   <button
@@ -143,7 +128,6 @@ function SignUpPage() {
                     }
                   >
                     {showPin ? (
-                      // Eye with slash
                       <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
@@ -155,12 +139,7 @@ function SignUpPage() {
                           strokeWidth="2"
                           strokeLinecap="round"
                         />
-                        <path
-                          d="M10.5 10.5a2 2 0 0 0 3 3"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        />
+
                         <path
                           d="M6.7 6.7C4.6 8.2 3.2 10.1 2 12c2.3 3.8 5.7 7 10 7 1.6 0 3.1-.4 4.4-1"
                           fill="none"
@@ -168,8 +147,9 @@ function SignUpPage() {
                           strokeWidth="2"
                           strokeLinecap="round"
                         />
+
                         <path
-                          d="M9.9 5.2c.7-.2 1.4-.2 2.1-.2 4.3 0 7.7 3.2 10 7-0.7 1.2-1.5 2.3-2.4 3.2"
+                          d="M9.9 5.2c.7-.2 1.4-.2 2.1-.2 4.3 0 7.7 3.2 10 7-.7 1.2-1.5 2.3-2.4 3.2"
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="2"
@@ -177,7 +157,6 @@ function SignUpPage() {
                         />
                       </svg>
                     ) : (
-                      // Eye
                       <svg
                         viewBox="0 0 24 24"
                         aria-hidden="true"
@@ -207,27 +186,21 @@ function SignUpPage() {
               <button
                 className="register-button"
                 type="submit"
-                onClick={() => {
-                  toast.success('Account registered successfully!');
-                }}
               >
-                Register
+                Login
               </button>
 
             </form>
 
             <div className="login-section">
-              <span>
-                Already have an account?
-              </span>
+              <span>Don't have an account?</span>
 
-              <Link to="/login">
-                Login
+              <Link to="/register">
+                Register
               </Link>
             </div>
 
           </div>
-
         </section>
 
       </div>
@@ -235,4 +208,4 @@ function SignUpPage() {
   )
 }
 
-export default SignUpPage
+export default SignInPage
