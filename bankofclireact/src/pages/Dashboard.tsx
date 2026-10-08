@@ -4,20 +4,31 @@ import BalanceHistory from "../components/BalanceHistory";
 import TransactionHistory from "../components/TransactionHistory/TransactionHistory";
 import { useEffect, useState } from "react";
 import { getAccountById } from "../data/accountRepository";
-import { getTransactions } from "../data/transactionRepository";
+import { getTransactionsForAccount } from "../data/transactionRepository";
 import * as transactionService from "../services/transactionService";
 import type { Account } from "../domain/Account";
 import type { Transaction } from "../domain/Transaction";
 import logo from "../assets/Logo.png";
 import logoDark from "../assets/LogoDark.svg";
+import { Navigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast'
 
-// change current_account_id when connecting account and dashboard and dashboard actually starts using the logged in account
-let CURRENT_ACCOUNT_ID = 1;
 const LOADING_DELAY_MS = 1000;
 
 export default function Dashboard() {
-    const [account, setAccount] = useState<Account>(() => getAccountById(CURRENT_ACCOUNT_ID));
-    const [transactions, setTransactions] = useState<Transaction[]>(() => getTransactions());
+    const location = useLocation();
+    const accountId: number | undefined = location.state?.account_id;
+
+    if (accountId == null) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return <DashboardContent accountId={accountId} />;
+}
+
+function DashboardContent({ accountId }: { accountId: number }) {
+    const [account, setAccount] = useState<Account>(() => getAccountById(accountId));
+    const [transactions, setTransactions] = useState<Transaction[]>(() => getTransactionsForAccount(accountId));
     const [isLoading, setIsLoading] = useState(true);
 
     // simulate load
@@ -33,35 +44,38 @@ export default function Dashboard() {
             return depositError;
         }
 
-        transactionService.deposit(CURRENT_ACCOUNT_ID, amount);
-        setAccount(getAccountById(CURRENT_ACCOUNT_ID));
-        setTransactions(getTransactions());
+        transactionService.deposit(accountId, amount);
+        setAccount(getAccountById(accountId));
+        setTransactions(getTransactionsForAccount(accountId));
+        toast.success("Deposit successful!");
         return null;
     };
 
     const withdraw = (amount: number): string | null => {
-        const withdrawError = transactionService.getWithdrawError(CURRENT_ACCOUNT_ID, amount);
+        const withdrawError = transactionService.getWithdrawError(accountId, amount);
 
         if (withdrawError) {
             return withdrawError;
         }
 
-        transactionService.withdraw(CURRENT_ACCOUNT_ID, amount);
-        setAccount(getAccountById(CURRENT_ACCOUNT_ID));
-        setTransactions(getTransactions());
+        transactionService.withdraw(accountId, amount);
+        setAccount(getAccountById(accountId));
+        setTransactions(getTransactionsForAccount(accountId));
+        toast.success("Withdraw successful!");
         return null;
     };
 
     const transfer = (toAccountId: number, amount: number): transactionService.TransferErrors | null => {
-        const transferErrors = transactionService.getTransferErrors(CURRENT_ACCOUNT_ID, toAccountId, amount);
+        const transferErrors = transactionService.getTransferErrors(accountId, toAccountId, amount);
 
         if (transferErrors) {
             return transferErrors;
         }
 
-        transactionService.transfer(CURRENT_ACCOUNT_ID, toAccountId, amount);
-        setAccount(getAccountById(CURRENT_ACCOUNT_ID));
-        setTransactions(getTransactions());
+        transactionService.transfer(accountId, toAccountId, amount);
+        setAccount(getAccountById(accountId));
+        setTransactions(getTransactionsForAccount(accountId));
+        toast.success("Transfer successful!");
         return null;
     };
 

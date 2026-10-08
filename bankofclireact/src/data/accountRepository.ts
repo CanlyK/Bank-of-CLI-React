@@ -22,3 +22,12 @@ export function saveAccount(account: Account): void {
 
     write("accounts", accounts);
 }
+
+export function addAccount(accountId: number, username: string, pin: string): Account {
+    const accounts = getAccounts();
+    const account: Account = { account_id: accountId, name: username, pin: pin, balance: 0 };
+
+    write("accounts", [...accounts, account]);
+
+    return account;
+}

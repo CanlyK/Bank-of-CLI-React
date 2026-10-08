@@ -5,6 +5,16 @@ export function getTransactions(): Transaction[] {
     return read("transactions");
 }
 
+export function getTransactionsForAccount(accountId: Number): Transaction[] {
+    const transactions = getTransactions();
+    const transactionsForAccount = transactions.filter((transaction) => {
+        if(transaction.transfer_type == "transfer")
+            return transaction.source_account == accountId || transaction.destination_account == accountId
+        return transaction.source_account == accountId
+    })
+    return transactionsForAccount
+}
+
 export function addTransaction(details: Omit<Transaction, "transaction_id" | "timestamp">): Transaction {
     const transactions = getTransactions();
     const lastId = Math.max(0, ...transactions.map((transaction) => transaction.transaction_id));

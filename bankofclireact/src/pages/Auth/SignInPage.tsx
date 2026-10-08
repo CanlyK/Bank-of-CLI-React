@@ -3,9 +3,10 @@ import {
   type FormEvent,
   useState,
 } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import './SignUpPage.css'
+import { getAccountById } from '../../data/accountRepository'
 
 type SignInFormData = {
   accountId: string
@@ -18,6 +19,7 @@ const initialFormData: SignInFormData = {
 }
 
 function SignInPage() {
+   const navigate = useNavigate();
   const [formData, setFormData] =
     useState<SignInFormData>(initialFormData)
 
@@ -42,7 +44,9 @@ function SignInPage() {
   ): void => {
     event.preventDefault()
 
-    console.log('Login account:', formData)
+    navigate('/dashboard', { 
+      state: getAccountById(Number(formData.accountId))
+    });
   }
 
   return (
