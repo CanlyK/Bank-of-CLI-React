@@ -83,7 +83,7 @@ export default function TransferForm({ onTransfer, onCancel, isAmountInput }: Tr
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="flex items-center justify-center gap-2 w-full py-3 border border-border rounded-full bg-surface text-xl font-semibold cursor-pointer hover:bg-surface-hover"
+                    className="flex items-center justify-center gap-2 w-full py-3 border border-border rounded-md bg-surface text-xl font-semibold cursor-pointer hover:bg-surface-hover"
                 >
                     <span aria-hidden="true" className="text-base">✕</span>
                     Cancel
@@ -91,7 +91,7 @@ export default function TransferForm({ onTransfer, onCancel, isAmountInput }: Tr
                 <button
                     type="button"
                     onClick={submitTransfer}
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-accent-gradient text-xl font-semibold text-white cursor-pointer hover:opacity-90"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-md bg-accent-gradient text-xl font-semibold text-white cursor-pointer hover:opacity-90"
                 >
                     <span aria-hidden="true" className="text-base">✓</span>
                     Confirm Transfer
