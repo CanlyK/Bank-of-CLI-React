@@ -57,7 +57,7 @@ export default function WithdrawForm({ onWithdraw, onCancel, isAmountInput }: Wi
                     onClick={onCancel}
                     className="flex items-center justify-center gap-2 w-full py-3 border border-border rounded-md bg-surface text-xl font-semibold cursor-pointer hover:bg-surface-hover"
                 >
-                    <span aria-hidden="true" className="text-base">✕</span>
+                    <span aria-hidden="true" className="text-base"></span>
                     Cancel
                 </button>
                 <button
@@ -65,7 +65,7 @@ export default function WithdrawForm({ onWithdraw, onCancel, isAmountInput }: Wi
                     onClick={submitWithdraw}
                     className="flex items-center justify-center gap-2 w-full py-3 rounded-md bg-accent-gradient text-xl font-semibold text-white cursor-pointer hover:opacity-90"
                 >
-                    <span aria-hidden="true" className="text-base">✓</span>
+                    <span aria-hidden="true" className="text-base"></span>
                     Confirm Withdrawal
                 </button>
             </div>

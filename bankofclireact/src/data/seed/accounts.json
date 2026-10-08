@@ -4,13 +4,13 @@
             "account_id": 1,
             "name": "Canly",
             "pin": "1234",
-            "balance": 10000
+            "balance": 0
         },
         {
             "account_id": 2,
             "name": "Sri",
             "pin": "1235",
-            "balance": 100
+            "balance": 0
         }
     ]
 }
