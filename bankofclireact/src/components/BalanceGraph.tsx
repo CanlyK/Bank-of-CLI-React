@@ -19,12 +19,11 @@ export default function BalanceGraph({ points }: BalanceGraphProps) {
 
     const { coords, yTicks, areaPath, linePath, innerBottom } = useMemo(() => {
         const balances = points.map((p) => p.balance);
-        let min = Math.min(...balances);
+        const min = Math.min(0, ...balances);
         let max = Math.max(...balances);
 
         const span = max - min;
         const padding = span > 0 ? span * 0.1 : Math.max(Math.abs(max) * 0.02, 1);
-        min -= padding;
         max += padding;
 
         const innerW = WIDTH - PAD.left - PAD.right;

@@ -13,7 +13,7 @@ import logoDark from "../assets/LogoDark.svg";
 import { Navigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast'
 
-const LOADING_DELAY_MS = 1000;
+const LOADING_DELAY_MS = 5000;
 
 export default function Dashboard() {
     const location = useLocation();
