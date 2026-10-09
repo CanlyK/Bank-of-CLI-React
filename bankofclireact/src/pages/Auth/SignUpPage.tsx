@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import Card from '../../components/common/Card'
 import './SignUpPage.css'
 import { addAccount, getAccounts } from '../../data/accountRepository'
+import { useNavigate } from 'react-router-dom'
 
 type SignUpFormData = {
   username: string
@@ -28,6 +29,8 @@ function SignUpPage() {
   const [showPin, setShowPin] = useState(false)
 
   const [errorMessage, setErrorMessage] = useState('')
+
+  const navigate = useNavigate()
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement>
@@ -75,6 +78,9 @@ function SignUpPage() {
     )
 
     toast.success('Account registered successfully!')
+
+    navigate('/login')
+    
   }
 
   return (
