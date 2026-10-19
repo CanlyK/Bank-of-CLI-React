@@ -2,7 +2,7 @@ import { useState } from "react";
 import Card from "../common/Card";
 
 interface DepositFormProps {
-    onDeposit: (amount: number) => string | null;
+    onDeposit: (amount: number) => Promise<string | null>;
     onCancel: () => void;
     isAmountInput: (input: string) => boolean;
 }
@@ -11,8 +11,8 @@ export default function DepositForm({ onDeposit, onCancel, isAmountInput }: Depo
     const [amount, setAmount] = useState("");
     const [amountError, setAmountError] = useState<string | null>(null);
 
-    const submitDeposit = (): void => {
-        const error = onDeposit(Number(amount));
+    const submitDeposit = async (): Promise<void> => {
+        const error = await onDeposit(Number(amount));
 
         if (error) {
             setAmountError(error);

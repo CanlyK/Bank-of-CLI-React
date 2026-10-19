@@ -4,3 +4,11 @@ export interface Account {
     pin: string;
     balance: number;
 }
+
+export interface User {
+    id: number;
+    username: number;
+    name: string;
+    pin: string;
+    balance: number;
+}

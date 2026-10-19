@@ -2,7 +2,7 @@ import { useState } from "react";
 import Card from "../common/Card";
 
 interface WithdrawFormProps {
-    onWithdraw: (amount: number) => string | null;
+    onWithdraw: (amount: number) => Promise<string | null>;
     onCancel: () => void;
     isAmountInput: (input: string) => boolean;
 }
@@ -11,8 +11,8 @@ export default function WithdrawForm({ onWithdraw, onCancel, isAmountInput }: Wi
     const [amount, setAmount] = useState("");
     const [amountError, setAmountError] = useState<string | null>(null);
 
-    const submitWithdraw = (): void => {
-        const error = onWithdraw(Number(amount));
+    const submitWithdraw = async (): Promise<void> => {
+        const error = await onWithdraw(Number(amount));
 
         if (error) {
             setAmountError(error);

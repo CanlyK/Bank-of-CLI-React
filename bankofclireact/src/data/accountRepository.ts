@@ -5,6 +5,12 @@ export function getAccounts(): Account[] {
     return read("accounts");
 }
 
+// export async function getAccounts(): Promise<Account[]> {
+//     const response = await fetch("https://localhost:8080/api/accounts");
+//     const data = response.json();
+//     return read("accounts");
+// }
+
 export function getAccountById(accountId: number): Account {
     const account = getAccounts().find((acc) => acc.account_id === accountId);
 

@@ -9,6 +9,7 @@ import Card from '../../components/common/Card'
 import './SignUpPage.css'
 import { addAccount, getAccounts } from '../../data/accountRepository'
 import { useNavigate } from 'react-router-dom'
+import { register } from '../../services/authenticationService'
 
 type SignUpFormData = {
   username: string
@@ -48,34 +49,24 @@ function SignUpPage() {
     setErrorMessage('')
   }
 
-  const handleSubmit = (
+  const handleSubmit = async (
     event: FormEvent<HTMLFormElement>
-  ): void => {
+  ): Promise<void> => {
     event.preventDefault()
 
     setErrorMessage('')
 
-    const accountId = Number(formData.accountId)
-
-    const accounts = getAccounts()
-
-    const accountAlreadyExists = accounts.some(
-      (account) => account.account_id === accountId
-    )
-
-    if (accountAlreadyExists) {
-      setErrorMessage(
-        'Account ID already exists. Please try a different account ID.'
-      )
-
+    try {
+      await register(
+        formData.accountId,
+        formData.username,
+        formData.accountPin
+    )}
+    catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : String(error))
       return
     }
-
-    addAccount(
-      accountId,
-      formData.username,
-      formData.accountPin
-    )
+    
 
     toast.success('Account registered successfully!')
 

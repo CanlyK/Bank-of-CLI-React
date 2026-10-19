@@ -4,6 +4,7 @@ import { addTransaction } from "../data/transactionRepository";
 export interface TransferErrors {
     amount?: string;
     account?: string;
+    general?: string;
 }
 
 export function getAmountError(amount: number): string | null {
@@ -58,43 +59,111 @@ export function getTransferErrors(fromAccountId: number, toAccountId: number, am
     return errors.amount || errors.account ? errors : null;
 }
 
-export function deposit(accountId: number, amount: number): void {
+// export function deposit(accountId: number, amount: number): void {
+//     const amountError = getAmountError(amount);
+
+//     if (amountError) {
+//         throw new Error(amountError);
+//     }
+
+//     const account = getAccountById(accountId);
+//     saveAccount({ ...account, balance: account.balance + amount });
+
+//     addTransaction({amount, transfer_type: "deposit", source_account: accountId, destination_account: 0,})
+// }
+
+// export function withdraw(accountId: number, amount: number): void {
+//     const withdrawError = getWithdrawError(accountId, amount);
+
+//     if (withdrawError) {
+//         throw new Error(withdrawError);
+//     }
+
+//     const account = getAccountById(accountId);
+//     saveAccount({ ...account, balance: account.balance - amount });
+
+//     addTransaction({amount, transfer_type: "withdraw", source_account: accountId, destination_account: 0})
+
+// }
+
+// export function transfer(fromAccountId: number, toAccountId: number, amount: number): void {
+//     const transferErrors = getTransferErrors(fromAccountId, toAccountId, amount);
+
+//     if (transferErrors) {
+//         throw new Error(transferErrors.amount ?? transferErrors.account);
+//     }
+
+//     const fromAccount = getAccountById(fromAccountId);
+//     const toAccount = getAccountById(toAccountId);
+//     saveAccount({ ...fromAccount, balance: fromAccount.balance - amount });
+//     saveAccount({ ...toAccount, balance: toAccount.balance + amount });
+//     addTransaction({amount, transfer_type: "transfer", source_account: fromAccountId, destination_account: toAccountId})
+// }
+
+export async function deposit(username: string, amount: number): Promise<void> {
     const amountError = getAmountError(amount);
 
     if (amountError) {
         throw new Error(amountError);
     }
 
-    const account = getAccountById(accountId);
-    saveAccount({ ...account, balance: account.balance + amount });
-
-    addTransaction({amount, transfer_type: "deposit", source_account: accountId, destination_account: 0,})
+    const response = await fetch("http://localhost:8080/deposit", {
+        method: 'POST',
+        body: JSON.stringify({
+            username: username,
+            amount: amount
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
 }
 
-export function withdraw(accountId: number, amount: number): void {
-    const withdrawError = getWithdrawError(accountId, amount);
+export async function withdraw(accountId: string, amount: number): Promise<void> {
+    const withdrawError = getWithdrawError(Number(accountId), amount);
 
     if (withdrawError) {
         throw new Error(withdrawError);
     }
 
-    const account = getAccountById(accountId);
-    saveAccount({ ...account, balance: account.balance - amount });
-
-    addTransaction({amount, transfer_type: "withdraw", source_account: accountId, destination_account: 0})
+    const response = await fetch("http://localhost:8080/withdraw", {
+        method: 'POST',
+        body: JSON.stringify({
+            username: accountId,
+            amount: amount
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
 }
 
-export function transfer(fromAccountId: number, toAccountId: number, amount: number): void {
-    const transferErrors = getTransferErrors(fromAccountId, toAccountId, amount);
+export async function transfer(fromAccountId: string, toAccountId: string, amount: number): Promise<void> {
+    const transferErrors = getTransferErrors(Number(fromAccountId), Number(toAccountId), amount);
 
     if (transferErrors) {
         throw new Error(transferErrors.amount ?? transferErrors.account);
     }
 
-    const fromAccount = getAccountById(fromAccountId);
-    const toAccount = getAccountById(toAccountId);
-    saveAccount({ ...fromAccount, balance: fromAccount.balance - amount });
-    saveAccount({ ...toAccount, balance: toAccount.balance + amount });
-    addTransaction({amount, transfer_type: "transfer", source_account: fromAccountId, destination_account: toAccountId})
+   const response = await fetch("http://localhost:8080/transfer", {
+        method: 'POST',
+        body: JSON.stringify({
+            username: fromAccountId,
+            destinationUsername: toAccountId,
+            amount: amount
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
 }

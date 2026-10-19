@@ -17,9 +17,9 @@ const CATEGORY_OPTIONS: { value: TransactionCategory; label: string }[] = [
 
 interface TransactionHistoryProps {
     transactions: Transaction[];
-    onDeposit: (amount: number) => string | null;
-    onWithdraw: (amount: number) => string | null;
-    onTransfer: (toAccountId: number, amount: number) => TransferErrors | null;
+    onDeposit: (amount: number) => Promise<string | null>;
+    onWithdraw: (amount: number) => Promise<string | null>;
+    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
     loading?: boolean;
 }
 
