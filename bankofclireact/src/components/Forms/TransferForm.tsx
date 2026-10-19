@@ -3,7 +3,7 @@ import Card from "../common/Card";
 import type { TransferErrors } from "../../services/transactionService";
 
 interface TransferFormProps {
-    onTransfer: (toAccountId: number, amount: number) => TransferErrors | null;
+    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
     onCancel: () => void;
     isAmountInput: (input: string) => boolean;
 }
@@ -17,16 +17,19 @@ export default function TransferForm({ onTransfer, onCancel, isAmountInput }: Tr
     const [toAccountId, setToAccountId] = useState("");
     const [amountError, setAmountError] = useState<string | null>(null);
     const [accountError, setAccountError] = useState<string | null>(null);
+    const [generalError, setGeneralError] = useState<string | null>(null);
 
-    const submitTransfer = (): void => {
-        const errors = onTransfer(Number(toAccountId), Number(amount));
+    const submitTransfer = async (): Promise<void> => {
+        const errors = await onTransfer(Number(toAccountId), Number(amount));
 
         if (errors) {
             setAmountError(errors.amount ?? null);
             setAccountError(toAccountId === "" ? "You must input an account ID." : errors.account ?? null);
+            setGeneralError(errors.general ?? null);
             return;
         }
 
+        setGeneralError(null);
         onCancel();
     };
 
@@ -78,6 +81,7 @@ export default function TransferForm({ onTransfer, onCancel, isAmountInput }: Tr
                     />
                 </div>
                 {accountError && <p role="alert" className="text-sm text-failure">{accountError}</p>}
+                {generalError && <p role="alert" className="text-sm text-failure">{generalError}</p>}
             </Card>
             <div className="flex flex-col gap-4">
                 <button

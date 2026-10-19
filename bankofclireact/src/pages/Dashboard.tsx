@@ -6,78 +6,122 @@ import { useEffect, useState } from "react";
 import { getAccountById } from "../data/accountRepository";
 import { getTransactionsForAccount } from "../data/transactionRepository";
 import * as transactionService from "../services/transactionService";
-import type { Account } from "../domain/Account";
+import type { User } from "../domain/Account";
 import type { Transaction } from "../domain/Transaction";
 import logo from "../assets/Logo.png";
 import logoDark from "../assets/LogoDark.svg";
 import { Navigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast'
-
-const LOADING_DELAY_MS = 5000;
+import { getMe } from '../services/userService'
 
 export default function Dashboard() {
     const location = useLocation();
-    const accountId: number | undefined = location.state?.account_id;
+    const accountId: number | undefined = location.state?.accountId;
+    const accessToken: string = location.state?.accessToken;
 
     if (accountId == null) {
         return <Navigate to="/login" replace />;
     }
 
-    return <DashboardContent accountId={accountId} />;
+    return <DashboardContent accountId={accountId} accessToken={accessToken}/>;
 }
 
-function DashboardContent({ accountId }: { accountId: number }) {
-    const [account, setAccount] = useState<Account>(() => getAccountById(accountId));
+function DashboardContent({ accountId, accessToken}: { accountId: number, accessToken: string }) {
+    const [account, setAccount] = useState<User | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>(() => getTransactionsForAccount(accountId));
     const [isLoading, setIsLoading] = useState(true);
 
-    // simulate load
+    const fetchMe = async () => {
+        setIsLoading(true)
+        let user;
+        try {
+            user = await getMe(accessToken)
+            setAccount(user)
+        }
+        catch (error) {
+            console.error(error)
+            return
+        }
+        setIsLoading(false)
+    }
+
     useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), LOADING_DELAY_MS);
-        return () => clearTimeout(timer);
+        fetchMe()
     }, []);
 
-    const deposit = (amount: number): string | null => {
+    const deposit = async (amount: number): Promise<string | null> => {
         const depositError = transactionService.getAmountError(amount);
 
         if (depositError) {
             return depositError;
         }
 
-        transactionService.deposit(accountId, amount);
-        setAccount(getAccountById(accountId));
-        setTransactions(getTransactionsForAccount(accountId));
+        // transactionService.deposit(accountId, amount);
+        // setAccount(getAccountById(accountId));
+        // setTransactions(getTransactionsForAccount(accountId));
+
+        try {
+            await transactionService.deposit(
+            String(accountId),
+            amount
+        )}
+        catch (error) {
+            return "Deposit failed."
+        }
         toast.success("Deposit successful!");
         return null;
     };
 
-    const withdraw = (amount: number): string | null => {
+    const withdraw = async (amount: number): Promise<string | null> => {
         const withdrawError = transactionService.getWithdrawError(accountId, amount);
 
         if (withdrawError) {
             return withdrawError;
         }
 
-        transactionService.withdraw(accountId, amount);
-        setAccount(getAccountById(accountId));
-        setTransactions(getTransactionsForAccount(accountId));
+        // transactionService.withdraw(accountId, amount);
+        // setAccount(getAccountById(accountId));
+        // setTransactions(getTransactionsForAccount(accountId));
+
+        try {
+            await transactionService.withdraw(
+            String(accountId),
+            amount
+        )}
+        catch (error) {
+            return "Withdraw failed."
+        }
+
         toast.success("Withdraw successful!");
         return null;
     };
 
-    const transfer = (toAccountId: number, amount: number): transactionService.TransferErrors | null => {
+    const transfer = async (toAccountId: number, amount: number): Promise<transactionService.TransferErrors | null> => {
         const transferErrors = transactionService.getTransferErrors(accountId, toAccountId, amount);
 
         if (transferErrors) {
             return transferErrors;
         }
 
-        transactionService.transfer(accountId, toAccountId, amount);
-        setAccount(getAccountById(accountId));
-        setTransactions(getTransactionsForAccount(accountId));
+        // transactionService.transfer(accountId, toAccountId, amount);
+        // setAccount(getAccountById(accountId));
+        // setTransactions(getTransactionsForAccount(accountId));
+        try {
+            await transactionService.transfer(
+            String(accountId),
+            String(toAccountId),
+            amount
+        )}
+        catch (error) {
+            return { general: "Transfer failed." };
+        }
         toast.success("Transfer successful!");
         return null;
     };
+
+    if (!account) {
+        return <div className="p-4">Loading...</div>;
+    }
 
     return (
         <div>
@@ -95,7 +139,7 @@ function DashboardContent({ accountId }: { accountId: number }) {
                     <CurrentBalance balance={account.balance} loading={isLoading} />
                     <BalanceHistory
                         transactions={transactions}
-                        accountId={account.account_id}
+                        accountId={account.username}
                         balance={account.balance}
                         loading={isLoading}
                     />

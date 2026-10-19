@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Card from '../../components/common/Card'
 import './SignUpPage.css'
 import { getAccounts } from '../../data/accountRepository'
+import { login } from '../../services/authenticationService'
 
 type SignInFormData = {
   accountId: string
@@ -45,36 +46,22 @@ function SignInPage() {
     setErrorMessage('')
   }
 
-  const handleSubmit = (
+  const handleSubmit = async (
     event: FormEvent<HTMLFormElement>,
-  ): void => {
+  ): Promise<void> => {
     event.preventDefault()
 
     setErrorMessage('')
-
-    const accountId = Number(formData.accountId)
-
-    const accounts = getAccounts()
-
-    const account = accounts.find(
-      (acc) => acc.account_id === accountId
-    )
-
-    // Account ID doesn't exist
-    if (!account) {
-      setErrorMessage("Account doesn't exist")
+    let account;
+    try {
+      account = await login(
+        formData.accountId,
+        formData.accountPin
+    )}
+    catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : String(error))
       return
     }
-
-    // Account exists, but PIN is incorrect
-    if (account.pin !== formData.accountPin) {
-      setErrorMessage(
-        'Invalid credentials. Please try again.'
-      )
-
-      return
-    }
-
     // Login successful
     navigate('/dashboard', {
       state: account,

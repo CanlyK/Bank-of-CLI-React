@@ -4,9 +4,9 @@ import Dropdown from "../common/Dropdown";
 import type { TransferErrors } from "../../services/transactionService";
 
 interface NavbarProps {
-    onDeposit: (amount: number) => string | null;
-    onWithdraw: (amount: number) => string | null;
-    onTransfer: (toAccountId: number, amount: number) => TransferErrors | null;
+    onDeposit: (amount: number) => Promise<string | null>;
+    onWithdraw: (amount: number) => Promise<string | null>;
+    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
 }
 
 const NAV_ITEM_WRAPPER_CLASS = "flex-1 sm:flex-none sm:w-32";
