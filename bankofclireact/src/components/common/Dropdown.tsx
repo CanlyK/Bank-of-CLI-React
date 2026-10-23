@@ -4,7 +4,7 @@ import DepositForm from "../Forms/DepositForm";
 import WithdrawForm from "../Forms/WithdrawForm";
 import TransferForm from "../Forms/TransferForm";
 import type { TransferErrors } from "../../services/transactionService";
-import { isAmountInput } from "../TransactionHistory/TransactionHistory"
+import { isAmountInput } from "../TransactionHistory/TransactionHistory";
 
 type ModalAction = "Deposit" | "Withdraw" | "Transfer";
 type DropdownVariant = "button" | "nav";
@@ -14,7 +14,7 @@ const ACTIONS: ModalAction[] = ["Deposit", "Withdraw", "Transfer"];
 interface DropdownProps {
     onDeposit: (amount: number) => Promise<string | null>;
     onWithdraw: (amount: number) => Promise<string | null>;
-    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
+    onTransfer: (toUsername: string, amount: number) => Promise<TransferErrors | null>;
     label?: string;
     variant?: DropdownVariant;
     openOnHover?: boolean;

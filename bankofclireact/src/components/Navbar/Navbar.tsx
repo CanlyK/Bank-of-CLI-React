@@ -6,12 +6,12 @@ import type { TransferErrors } from "../../services/transactionService";
 interface NavbarProps {
     onDeposit: (amount: number) => Promise<string | null>;
     onWithdraw: (amount: number) => Promise<string | null>;
-    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
+    onTransfer: (toUsername: string, amount: number) => Promise<TransferErrors | null>;
 }
 
 const NAV_ITEM_WRAPPER_CLASS = "flex-1 sm:flex-none sm:w-32";
 
-const navItemClass =(active: boolean): string =>
+const navItemClass = (active: boolean): string =>
     `w-full py-2 rounded-full text-xs cursor-pointer sm:text-sm ${active ? "bg-accent-gradient font-semibold text-white" : ""}`;
 
 function SunIcon() {

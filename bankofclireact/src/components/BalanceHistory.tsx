@@ -8,35 +8,38 @@ export interface BalancePoint {
     balance: number;
 }
 
-// How much a single transaction changed the balance of `accountId`.
-function signedDelta(transaction: Transaction, accountId: number): number {
-    const type = transaction.transfer_type.toLowerCase();
+function formatTimestamp(raw: string): string {
+    const trimmed = raw.replace(/(\.\d{3})\d+/, "$1");
+    const date = new Date(trimmed);
+    return Number.isNaN(date.getTime()) ? raw : date.toLocaleString();
+}
+
+function signedDelta(transaction: Transaction, username: string): number {
+    const type = transaction.transferType.toLowerCase();
 
     if (type === "deposit") return transaction.amount;
     if (type === "withdraw") return -transaction.amount;
     if (type === "transfer") {
-        // Outgoing transfers reduce the balance, incoming transfers increase it.
-        return transaction.source_account === accountId ? -transaction.amount : transaction.amount;
+        return transaction.sourceUsername === username ? -transaction.amount : transaction.amount;
     }
     return 0;
 }
 
-// Works backwards from the current balance so the final point always equals it.
 export function buildBalanceHistory(
     transactions: Transaction[],
-    accountId: number,
+    username: string,
     currentBalance: number
 ): BalancePoint[] {
-    const ordered = [...transactions].sort((a, b) => a.transaction_id - b.transaction_id);
+    const ordered = [...transactions].sort((a, b) => a.id - b.id);
 
-    const totalDelta = ordered.reduce((sum, t) => sum + signedDelta(t, accountId), 0);
+    const totalDelta = ordered.reduce((sum, t) => sum + signedDelta(t, username), 0);
     let running = currentBalance - totalDelta;
 
     const points: BalancePoint[] = [{ timestamp: "Start", balance: running }];
 
     for (const transaction of ordered) {
-        running += signedDelta(transaction, accountId);
-        points.push({ timestamp: transaction.timestamp, balance: running });
+        running += signedDelta(transaction, username);
+        points.push({ timestamp: formatTimestamp(transaction.timestamp), balance: running });
     }
 
     return points;
@@ -44,13 +47,13 @@ export function buildBalanceHistory(
 
 interface BalanceHistoryProps {
     transactions: Transaction[];
-    accountId: number;
+    username: string;
     balance: number;
     loading?: boolean;
 }
 
-export default function BalanceHistory({ transactions, accountId, balance, loading = false }: BalanceHistoryProps) {
-    const points = buildBalanceHistory(transactions, accountId, balance);
+export default function BalanceHistory({ transactions, username, balance, loading = false }: BalanceHistoryProps) {
+    const points = buildBalanceHistory(transactions, username, balance);
 
     return (
         <Card className="flex flex-col min-h-52 p-4 md:col-span-2">

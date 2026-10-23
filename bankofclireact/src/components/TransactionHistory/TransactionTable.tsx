@@ -1,7 +1,7 @@
 import Skeleton from "../common/Skeleton";
 import type { Transaction } from "../../domain/Transaction";
 
-const COLUMNS = ["Date/Time", "Category", "From Account ID", "To Account ID", "Amount"];
+const COLUMNS = ["Date/Time", "Category", "From", "To", "Amount", "Description"];
 const SKELETON_ROWS = [0, 1, 2, 3, 4];
 
 interface TransactionTableProps {
@@ -40,12 +40,13 @@ export default function TransactionTable({ transactions, loading = false }: Tran
                         </tr>
                     )}
                     {!loading && transactions.map((transaction) => (
-                        <tr key={transaction.transaction_id} className="border-b border-border">
-                            <td className="px-4 py-4">{transaction.timestamp}</td>
-                            <td className="px-4 py-4 uppercase">{transaction.transfer_type}</td>
-                            <td className="px-4 py-4">{transaction.transfer_type == "transfer" ? transaction.source_account : "-"}</td>
-                            <td className="px-4 py-4">{transaction.transfer_type == "transfer" ? transaction.destination_account : "-"}</td>
+                        <tr key={transaction.id} className="border-b border-border">
+                            <td className="px-4 py-4">{new Date(transaction.timestamp).toLocaleString()}</td>
+                            <td className="px-4 py-4 uppercase">{transaction.transferType}</td>
+                            <td className="px-4 py-4">{transaction.sourceUsername}</td>
+                            <td className="px-4 py-4">{transaction.destinationUsername ?? "-"}</td>
                             <td className="px-4 py-4">{transaction.amount}</td>
+                            <td className="px-4 py-4">{transaction.description ?? "-"}</td>
                         </tr>
                     ))}
                 </tbody>

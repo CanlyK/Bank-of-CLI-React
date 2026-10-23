@@ -19,7 +19,7 @@ interface TransactionHistoryProps {
     transactions: Transaction[];
     onDeposit: (amount: number) => Promise<string | null>;
     onWithdraw: (amount: number) => Promise<string | null>;
-    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
+    onTransfer: (toUsername: string, amount: number) => Promise<TransferErrors | null>;
     loading?: boolean;
 }
 
@@ -32,8 +32,8 @@ export default function TransactionHistory({ transactions, onDeposit, onWithdraw
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
     const visibleTransactions = transactions
-        .filter((transaction) => category === "all" || transaction.transfer_type === category)
-        .sort((a, b) => sortOrder === "asc" ? a.transaction_id - b.transaction_id : b.transaction_id - a.transaction_id);
+        .filter((transaction) => category === "all" || transaction.transferType === category)
+        .sort((a, b) => sortOrder === "asc" ? a.id - b.id : b.id - a.id);
 
     return (
         <Card className="p-4 sm:p-8">
@@ -58,7 +58,7 @@ export default function TransactionHistory({ transactions, onDeposit, onWithdraw
                             <option key={option.value} value={option.value}>{option.label}</option>
                         ))}
                     </select>
-                    <Dropdown onDeposit={onDeposit} onWithdraw={onWithdraw} onTransfer={onTransfer}/>
+                    <Dropdown onDeposit={onDeposit} onWithdraw={onWithdraw} onTransfer={onTransfer} />
                 </div>
             </div>
 

@@ -7,8 +7,7 @@ export interface Account {
 
 export interface User {
     id: number;
-    username: number;
+    username: string;
     name: string;
-    pin: string;
     balance: number;
 }

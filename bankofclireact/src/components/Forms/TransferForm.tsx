@@ -3,32 +3,41 @@ import Card from "../common/Card";
 import type { TransferErrors } from "../../services/transactionService";
 
 interface TransferFormProps {
-    onTransfer: (toAccountId: number, amount: number) => Promise<TransferErrors | null>;
+    onTransfer: (toUsername: string, amount: number) => Promise<TransferErrors | null>;
     onCancel: () => void;
     isAmountInput: (input: string) => boolean;
 }
 
-export function isAccountIdInput(value: string): boolean {
-    return /^\d*$/.test(value);
+export function isUsernameInput(value: string): boolean {
+    return value.length <= 20;
 }
 
 export default function TransferForm({ onTransfer, onCancel, isAmountInput }: TransferFormProps) {
     const [amount, setAmount] = useState("");
-    const [toAccountId, setToAccountId] = useState("");
+    const [toUsername, setToUsername] = useState("");
     const [amountError, setAmountError] = useState<string | null>(null);
-    const [accountError, setAccountError] = useState<string | null>(null);
+    const [usernameError, setUsernameError] = useState<string | null>(null);
     const [generalError, setGeneralError] = useState<string | null>(null);
 
     const submitTransfer = async (): Promise<void> => {
-        const errors = await onTransfer(Number(toAccountId), Number(amount));
+        const trimmed = toUsername.trim();
+
+        if (trimmed === "") {
+            setUsernameError("You must input a username.");
+            return;
+        }
+
+        const errors = await onTransfer(trimmed, Number(amount));
 
         if (errors) {
             setAmountError(errors.amount ?? null);
-            setAccountError(toAccountId === "" ? "You must input an account ID." : errors.account ?? null);
+            setUsernameError(errors.account ?? null);
             setGeneralError(errors.general ?? null);
             return;
         }
 
+        setAmountError(null);
+        setUsernameError(null);
         setGeneralError(null);
         onCancel();
     };
@@ -37,7 +46,7 @@ export default function TransferForm({ onTransfer, onCancel, isAmountInput }: Tr
         <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
                 <h2 className="text-3xl font-bold">Transfer Amount</h2>
-                <p className="text-lg leading-tight italic">Input an amount to transfer.</p>
+                <p className="text-lg leading-tight italic">Input an amount and a recipient username.</p>
             </div>
             <Card className="flex flex-col gap-2 px-6 py-5 border border-border sm:px-12">
                 <label htmlFor="transfer-amount" className="text-lg italic">Amount</label>
@@ -61,26 +70,27 @@ export default function TransferForm({ onTransfer, onCancel, isAmountInput }: Tr
                     />
                 </div>
                 {amountError && <p role="alert" className="text-sm text-failure">{amountError}</p>}
-                <label htmlFor="transfer-account" className="text-lg italic">Account ID:</label>
+                <label htmlFor="transfer-username" className="text-lg italic">Recipient username:</label>
                 <div className="flex items-center text-4xl font-bold sm:text-5xl">
                     <input
                         type="text"
-                        inputMode="numeric"
-                        name="transfer-account"
-                        id="transfer-account"
-                        placeholder="0"
-                        value={toAccountId}
+                        name="transfer-username"
+                        id="transfer-username"
+                        placeholder="username"
+                        value={toUsername}
+                        maxLength={20}
+                        autoComplete="off"
                         onChange={(event) => {
-                            if (isAccountIdInput(event.target.value)) {
-                                setToAccountId(event.target.value);
-                                setAccountError(null);
+                            if (isUsernameInput(event.target.value)) {
+                                setToUsername(event.target.value);
+                                setUsernameError(null);
                             }
                         }}
-                        aria-invalid={accountError !== null}
-                        className="w-full min-w-0 bg-transparent outline-none no-spinner"
+                        aria-invalid={usernameError !== null}
+                        className="w-full min-w-0 bg-transparent outline-none text-2xl sm:text-3xl"
                     />
                 </div>
-                {accountError && <p role="alert" className="text-sm text-failure">{accountError}</p>}
+                {usernameError && <p role="alert" className="text-sm text-failure">{usernameError}</p>}
                 {generalError && <p role="alert" className="text-sm text-failure">{generalError}</p>}
             </Card>
             <div className="flex flex-col gap-4">
